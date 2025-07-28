@@ -1,8 +1,9 @@
 import numpy as np
 import pandas as pd
 import random
-from datetime import date, timedelta
+from datetime import date, timedelta, timezone
 from datetime import datetime
+from dateutil import tz
 from termcolor import colored, cprint
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
@@ -127,3 +128,42 @@ print ("Type of the variable {}".format(type(dt)))
 
 # From linux time stamp to datetime format conversion
 #datetime.fromtimestamp
+
+start_date = datetime(2025, 1, 30, 11, 57, 30)
+end_date = datetime(2025, 2, 20, 11, 57, 30)
+duratiuon = end_date - start_date
+print ("Time difference is : {}".format(duratiuon))
+print ("Time difference in seconds : {}".format(duratiuon.total_seconds()))
+
+time_delta1 = timedelta(seconds=1)
+final_date = start_date + time_delta1
+print ("End time after time_delta1 : {}".format(final_date))
+
+# Timezone 
+IST = timezone(timedelta(hours=5,minutes=30))
+start_date = datetime(2025, 1, 30, 11, 57, 30, tzinfo=IST)
+print ("IST Time:: {}".format(start_date))
+# Same can be achieved like below;
+start_date = datetime(2025, 1, 30, 11, 57, 30)
+print (colored ("IST Time:: {}".format(start_date.astimezone(IST)), "green", attrs=['bold','underline']))
+print (colored ("IST Time:: {}".format(start_date.replace(tzinfo=timezone.utc)), "green", attrs=['bold','underline']))
+
+PST = timezone(timedelta(hours=-8))
+end_date = datetime(2025, 2, 20, 11, 57, 30, tzinfo=PST)
+print ("PST Time:: {}".format(end_date))
+# Same can be achieved like below;
+end_date = datetime(2025, 2, 20, 11, 57, 30)
+print (colored ("IST Time:: {}".format(end_date.astimezone(PST)), "green", attrs=['bold','underline']))
+
+print (colored ("Finding timezone", "green", attrs=['bold','underline']))
+india_timezone = tz.gettz('Asia/Kolkata')
+print (india_timezone)
+pst_timezone = tz.gettz('America/New_York')
+print (pst_timezone)
+
+print (colored ("Use of the timezone info", "red", attrs=['bold','underline']))
+end_date = datetime(2025, 2, 20, 11, 57, 30, tzinfo=pst_timezone)
+print ("PST Time:: {}".format(end_date))
+end_date = datetime(2025, 2, 20, 11, 57, 30, tzinfo=india_timezone)
+print ("IST Time:: {}".format(end_date))
+
